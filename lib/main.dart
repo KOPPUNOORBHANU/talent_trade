@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
-      home: HomeScreen(),  //EntryScreen() need to be add after testing with the screens
+      home: EntryScreen(),  //EntryScreen() need to be add after testing with the screens
     );
   }
 }
