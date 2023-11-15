@@ -30,7 +30,12 @@ class _SignupScreenState extends State<SignupScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Get.to(() => PersonalDetailsScreen());
+                if (_formKey.currentState!.validate()) {
+                  Get.to(() => PersonalDetailsScreen());
+                }else{
+                  Get.to(() => SignupScreen());
+                }
+                
               },
               child: Text("OK"),
             ),
@@ -154,7 +159,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Please enter your email.";
-                        } else if (!value!.contains('@')) {
+                        } else if (!value.contains('@')) {
                           return "Please enter a valid email.";
                         }
                         return null;
@@ -184,10 +189,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        // if (_formKey.currentState!.validate()) {
-                        //   _showAlert("Signup successful!");
-                        // }
-                        Get.to(PersonalDetailsScreen());
+                        if (_formKey.currentState!.validate()) {
+                          _showAlert("Signup successful!");
+                          Get.to(PersonalDetailsScreen());
+                        }else{
+                          _showAlert("Please complete the required fields!!");
+                        }
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey[400],

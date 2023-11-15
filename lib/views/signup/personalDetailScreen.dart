@@ -80,6 +80,27 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
     }
   }
 
+    void _showAlert(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Alert"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -196,6 +217,17 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     selectedOccupation != null &&
                     selectedLocation != null) {
                   Get.to(PersonalDetailsScreen1());
+                }else if(selectedDate==null){
+                  _showAlert("Please select date of birth");
+                  Get.to(PersonalDetailsScreen());
+                }
+                else if(selectedOccupation==null){
+                  _showAlert("Please select your occupation");
+                  Get.to(PersonalDetailsScreen());
+                }
+                else if(selectedLocation==null){
+                  _showAlert("Please select your Location");
+                  Get.to(PersonalDetailsScreen());
                 }
               },
               style: ElevatedButton.styleFrom(
