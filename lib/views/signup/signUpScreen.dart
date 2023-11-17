@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -189,12 +193,25 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _showAlert("Signup successful!");
-                          Get.to(PersonalDetailsScreen());
-                        }else{
-                          _showAlert("Please complete the required fields!!");
-                        }
+                        // _showAlert("Signup successful!");
+                          var firstName=_firstNameController.text.trim();
+                          var lastName=_lastNameController.text.trim();
+                          var phoneNumber=_phoneController.text.trim();
+                          var userEmail=_emailController.text.trim();
+                          var userPassword=_passwordController.text.trim();
+
+                          FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: userPassword)
+                          .then((value) => {
+                            print("user created"),
+                          }
+                          
+                          );
+                        // if (_formKey.currentState!.validate()) {
+                          
+                        //   Get.to(PersonalDetailsScreen());
+                        // }else{
+                        //   _showAlert("Please complete the required fields!!");
+                        // }
                         
                       },
                       style: ElevatedButton.styleFrom(
