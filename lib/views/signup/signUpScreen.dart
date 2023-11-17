@@ -1,5 +1,6 @@
-import 'dart:math';
 
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  User? currentUser=FirebaseAuth.instance.currentUser;
 
   void _showAlert(String message) {
     showDialog(
@@ -86,9 +89,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ],
                 )),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -102,7 +105,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(50)),
                         hintText: 'Enter Your Name.....',
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -111,7 +114,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       controller: _lastNameController,
                       decoration: InputDecoration(
@@ -120,7 +123,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(50)),
                         hintText: 'Enter Your Last Name.....',
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -129,7 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       controller: _phoneController,
                       decoration: InputDecoration(
@@ -138,7 +141,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(50)),
                         hintText: 'Enter Your Phone Number.....',
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
@@ -148,7 +151,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -157,7 +160,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(50)),
                         hintText: 'Enter Your Email.....',
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
@@ -169,7 +172,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
@@ -179,7 +182,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             borderRadius: BorderRadius.circular(50)),
                         hintText: 'Enter Your Password.....',
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -190,7 +193,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         // _showAlert("Signup successful!");
@@ -203,6 +206,15 @@ class _SignupScreenState extends State<SignupScreen> {
                           FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: userPassword)
                           .then((value) => {
                             print("user created"),
+                            FirebaseFirestore.instance.collection("users").doc(currentUser!.uid).set({
+                              'firstName': firstName,
+                              'lastName': lastName,
+                              'phoneNumber':phoneNumber,
+                              'userEmail':userEmail,
+                              'create At': DateTime.now(),
+                              'userId': currentUser!.uid,
+                            }),
+                            print("data stored"),
                           }
                           
                           );
