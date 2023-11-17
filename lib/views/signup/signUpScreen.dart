@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:talent_trade/services/signUpService.dart';
 import 'package:talent_trade/views/signup/personalDetailScreen.dart';
 
 import '../signin/signInScreen.dart';
@@ -195,7 +196,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async{
                         // _showAlert("Signup successful!");
                           var firstName=_firstNameController.text.trim();
                           var lastName=_lastNameController.text.trim();
@@ -203,17 +204,15 @@ class _SignupScreenState extends State<SignupScreen> {
                           var userEmail=_emailController.text.trim();
                           var userPassword=_passwordController.text.trim();
 
-                          FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: userPassword)
+                          await FirebaseAuth.instance.createUserWithEmailAndPassword(email: userEmail, password: userPassword)
                           .then((value) => {
                             print("user created"),
-                            FirebaseFirestore.instance.collection("users").doc(currentUser!.uid).set({
-                              'firstName': firstName,
-                              'lastName': lastName,
-                              'phoneNumber':phoneNumber,
-                              'userEmail':userEmail,
-                              'create At': DateTime.now(),
-                              'userId': currentUser!.uid,
-                            }),
+                            signUpUser(
+                              firstName,
+                              lastName,
+                              phoneNumber,
+                              userEmail
+                            ),
                             print("data stored"),
                           }
                           
